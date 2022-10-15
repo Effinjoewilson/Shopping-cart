@@ -5,7 +5,7 @@ var collection= require('../config/collections')
 module.exports={
 
     addProduct:(producted,callback) =>{                                       // using call back 
-        //console.log(product);   
+        //console.log(producted);   
 
         db.get().collection('product').insertOne(producted).then((data)=>{
            // console.log(data);
