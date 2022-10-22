@@ -13,5 +13,29 @@ module.exports={
             })
         })
         
+    },
+
+    doLogin:(userData)=>{
+        return new Promise(async(resolve,reject)=>{
+            let loginStatus=false
+            let response={}
+            let user= await db.get().collection(collection.USER_COLLECTION).findOne({email:userData.email})
+            if(user){
+                bcrypt.compare(userData.password,user.password).then((status)=>{       //bcrypt.compare is to check if the current
+                    if(status){                                                 //password is same to encrypted password in database
+                        console.log("Login success")
+                        response.user=user
+                        response.status=true
+                        resolve(response)
+                    }else{
+                        console.log("Login failed")
+                        resolve({status:false})
+                    }
+                })
+            }else{
+                console.log("Login failed")
+                resolve({status:false})
+            }
+        })
     }
 }
