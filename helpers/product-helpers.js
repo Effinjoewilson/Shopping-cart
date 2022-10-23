@@ -24,7 +24,7 @@ module.exports={
     deleteProduct:(proId) =>{
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_COLLECTION).deleteOne({_id:objectId(proId)}).then((response)=>{
-                console.log(response)
+                //console.log(response)
                 resolve(response)
             })
         })
