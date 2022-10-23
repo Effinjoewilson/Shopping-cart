@@ -2,6 +2,13 @@ var express = require('express');
 var router = express.Router();
 var productHelpers = require('../helpers/product-helpers');
 const userHelpers = require('../helpers/user-helpers')
+const verifyLogin=(req,res,next)=>{
+  if(req.session.loggedIn){
+    next()
+  }else{
+    res.redirect('/login')
+  }
+}
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -51,6 +58,18 @@ router.post('/signup', (req,res)=>{
   userHelpers.doSignup(req.body).then((response)=>{
     console.log(response)
   })
+})
+
+router.get('/cart',verifyLogin, (req,res)=>{
+
+  let user=req.session.user
+
+  res.render('user/cart',{user})                                                  //let user=req.session.user
+  /*                                                                      //if(req.session.loggedIn){
+     using middleware instead of checking                                        //res.render('user/cart',{user})
+     session at each time                                                // }else
+  */                                                                             // res.redirect('/login')
+  
 })
 
 module.exports = router;
