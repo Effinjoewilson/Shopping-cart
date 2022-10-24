@@ -70,8 +70,8 @@ module.exports={
         return new Promise(async(resolve,reject)=>{
             let cartItems= await db.get().collection(collection.CART_COLLECTION).aggregate([
                 {
-                    $match:{user:objectId(userId)}
-                },
+                    $match:{user:objectId(userId)}            //aggregate method is used in this case to check the userId
+                },                                           //and display the products which is added to cart
                 {
                     $lookup:{
                         from:collection.PRODUCT_COLLECTION,
