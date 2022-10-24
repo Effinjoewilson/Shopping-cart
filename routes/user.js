@@ -75,4 +75,11 @@ router.get('/cart',verifyLogin, (req,res)=>{
   
 })
 
+router.get('/add-to-cart/:id',verifyLogin, (req,res)=>{
+  //console.log("This is Effin")
+  userHelpers.addToCart(req.params.id,req.session.user._id).then(()=>{
+    res.redirect('/')
+  })
+})
+
 module.exports = router;
