@@ -81,11 +81,11 @@ router.get('/cart',verifyLogin, async(req,res)=>{
   
 })
 
-router.get('/add-to-cart/:id',verifyLogin, (req,res)=>{
-  //console.log("This is Effin")
+router.get('/add-to-cart/:id', (req,res)=>{                                  //verifyLogin is removed. Ajax blocks it
+  //console.log("This is Effin")                                            //it should be added in a different manner
   userHelpers.addToCart(req.params.id,req.session.user._id).then(()=>{
-    res.redirect('/')
+    res.json({status:true})
   })
 })
 
-module.exports = router;
+module.exports = router; 
