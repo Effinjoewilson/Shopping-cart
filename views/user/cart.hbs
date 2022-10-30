@@ -13,13 +13,15 @@
             {{#each products}}
             <tbody>
                 <tr>
-                    <td>
+                    {{#each this.product}}           {{!inside the array products, there is another array product,}}
+                    <td>                             {{!where the product details are present}}
                         <img src="/product-images/{{this._id}}.jpg" style="width: 75px; height: 75px;">
                     </td>
                     <td>{{this.name}}</td>
                     <td>{{this.price}}</td>
+                    {{/each}}
                     <td>
-                        <button class="cart-item-count me-2">-</button>1<button class="cart-item-count ms-2">+</button>
+                        <button class="cart-item-count me-2">-</button>{{this.quantity}}<button class="cart-item-count ms-2">+</button>
                     </td>
                     <td>
                         <a href="" class="btn btn-danger">Remove</a>

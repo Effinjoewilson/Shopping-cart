@@ -72,8 +72,8 @@ router.get('/cart',verifyLogin, async(req,res)=>{
 
   let user=req.session.user
   let products=await userHelpers.getCartProducts(req.session.user._id)
-  //console.log(products)
-  res.render('user/cart',{user,products})                                                  //let user=req.session.user
+  //console.log(products) //<=
+  res.render('user/cart',{user,products})                                         //let user=req.session.user
   /*                                                                      //if(req.session.loggedIn){
      using middleware instead of checking                                        //res.render('user/cart',{user})
      session at each time                                                // }else

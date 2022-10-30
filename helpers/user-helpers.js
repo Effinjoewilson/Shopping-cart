@@ -90,25 +90,26 @@ module.exports={
                     $match:{user:objectId(userId)}            //aggregate method is used in this case to check the userId
                 },                                           //and display the products which is added to cart
                 {
+                    $unwind:'$products'
+                },
+                {
+                    $project:{
+                        item:'$products.item',
+                        quantity:'$products.quantity'
+                    }
+                },
+                {
                     $lookup:{
                         from:collection.PRODUCT_COLLECTION,
-                        let:{prodList:'$products'},
-                        pipeline:[
-                            {
-                                $match:{
-                                    $expr:{
-                                        $in:['$_id','$$prodList']
-                                    }
-                                }
-                            }
-                        ],
-                        as:'cartItems'
+                        localField:'item',
+                        foreignField:'_id',
+                        as:'product'
                     }
                 }
             ]).toArray()
-            //console.log(cartItems)
-            //console.log(cartItems[0].cartItems)
-            resolve(cartItems[0].cartItems)
+            //console.log(cartItems)   //<=
+            //console.log(cartItems[0].products)
+            resolve(cartItems)
             
         })
     },
