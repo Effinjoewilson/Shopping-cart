@@ -43,21 +43,38 @@ module.exports={
     addToCart:(proId,userId)=>{
        // console.log(proId+" Chris")
        // console.log(userId+" Effin")
+       let proObj={
+        item:objectId(proId),
+        quantity:1
+        }
         return new Promise(async(resolve,reject)=>{
-            let userCart=await db.get().collection(collection.CART_COLLECTION).findOne({user:objectId(userId)})//in the 
-            if(userCart){                                                      //cart_collcetion checking if the user is 
-                db.get().collection(collection.CART_COLLECTION)               //alredy added a item to cart, by checking userId.  
-                .updateOne({user:objectId(userId)},{                         //if already added push new items to it.
-                                                                            // else new user is created to a cart_collection and
-                        $push:{products:objectId(proId)}                   //products are passed as an array.
+            let userCart=await db.get().collection(collection.CART_COLLECTION).findOne({user:objectId(userId)})//in the cart_collcetion
+            if(userCart){                                                               // checking if the user is alredy added
+                let proExist=userCart.products.findIndex(product=> product.item==proId)// a item to cart, by checking userId.
+                console.log(proExist)                                                 //if already added push new items to it.
+                if(proExist!=-1){                                                    // else new user is created to a cart_collection 
+                    db.get().collection(collection.CART_COLLECTION)                 //and products are passed as an array.
+                    .updateOne({'products.item':objectId(proId)},
+                    {
+                        $inc:{'products.$.quantity':1}                       //If already user is present, while pushing new product
+                    }                                                       //to the cart, checking if the product is alredy present
+                    ).then(()=>{                                           //in the cart. if it is alredy present add quantity
+                        resolve()                                         //to the product by incrementing the quantity by 1.
+                    })                                                   //else new product is pushed to the cart.
+                }else{                                                       
+                db.get().collection(collection.CART_COLLECTION)                 
+                .updateOne({user:objectId(userId)},{                         
+                                                                            
+                        $push:{products:proObj}                   
                     
                 }).then((response)=>{
                     resolve()
                 })
+                }
             }else{
                 let cartObj={
                     user:objectId(userId),
-                    products:[objectId(proId)]
+                    products:[proObj]
                 }
                 db.get().collection(collection.CART_COLLECTION).insertOne(cartObj).then((response)=>{
                     resolve()
