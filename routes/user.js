@@ -104,7 +104,7 @@ router.post('/remove-product', (req,res)=>{
 
 router.get('/place-order', verifyLogin, (req,res)=>{
   let user=req.session.user
-  res.render('user/placeOrder',{admin:false,user})
+  res.render('user/place-order',{admin:false,user})
 })
 
 module.exports = router; 
