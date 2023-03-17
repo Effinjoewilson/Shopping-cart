@@ -26,7 +26,7 @@
                         <button style="float: left;" class="cart-item-count ms-2" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1)">+</button>
                     </td>
                     <td>
-                        <a href="" class="btn btn-danger">Remove</a>
+                        <a href="" onclick="removeProduct('{{this._id}}','{{this.product._id}}')" class="btn btn-danger">Remove</a>
                     </td>
                 </tr>
             </tbody>
@@ -53,12 +53,35 @@
             success:(response)=>{
                 if(response.removeProduct){
                     alert("Product removed from the cart")
+                    //console.log("PRODUCT DELETED")
                     location.reload()
                 }else{
-                    
+                    //console.log("PRPDUCT INCREMENT OR DECREMENTED")
                     document.getElementById(proId).innerHTML=quantity+count
                 }
             }
         })
     }
+
+    function removeProduct(cartId,proId){
+
+        $.ajax({
+            url:'/remove-product',
+            data:{
+                cart:cartId,
+                product:proId
+            },
+            method:'post',
+            success:(response)=>{
+                if(response.removeProduct){
+                    //console.log("PRODUCT DELETED")
+                    alert("Product removed from the cart")
+                    location.reload()
+                }else{
+                    console.log("ERROR OCCURED")
+                }
+            }
+        })
+    }
+
 </script>
