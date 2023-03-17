@@ -102,9 +102,10 @@ router.post('/remove-product', (req,res)=>{
   })
 })
 
-router.get('/place-order', verifyLogin, (req,res)=>{
+router.get('/place-order', verifyLogin, async(req,res)=>{
   let user=req.session.user
-  res.render('user/place-order',{admin:false,user})
+  let total=await userHelpers.getTotalAmount(req.session.user._id)
+  res.render('user/place-order',{admin:false,user,total})
 })
 
 module.exports = router; 
