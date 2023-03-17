@@ -88,4 +88,11 @@ router.get('/add-to-cart/:id', (req,res)=>{                                  //v
   })
 })
 
+router.post('/change-product-quantity', (req,res,next)=>{
+  //console.log("This is Effin") 
+  userHelpers.changeProductQuantity(req.body).then((response)=>{  //in req.body= 4 data that is passed from cart.hbs
+    res.json(response)
+  })
+})
+
 module.exports = router; 
