@@ -109,4 +109,7 @@ router.get('/place-order', verifyLogin, async(req,res)=>{
   res.render('user/place-order',{admin:false,user,total})
 })
 
+router.post('/place-order', (req,res)=>{
+  console.log(req.body)
+})
 module.exports = router; 
