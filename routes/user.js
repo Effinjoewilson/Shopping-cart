@@ -72,8 +72,9 @@ router.get('/cart',verifyLogin, async(req,res)=>{
 
   let user=req.session.user
   let products=await userHelpers.getCartProducts(req.session.user._id)
+  let totalValue=await userHelpers.getTotalAmount(req.session.user._id)  //to display total value in cart page
   //console.log(products) //<=
-  res.render('user/cart',{user,products})                                         //let user=req.session.user
+  res.render('user/cart',{user,products,totalValue})                             //let user=req.session.user
   /*                                                                      //if(req.session.loggedIn){
      using middleware instead of checking                                        //res.render('user/cart',{user})
      session at each time                                                // }else

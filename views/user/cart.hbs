@@ -34,7 +34,7 @@
         </table>
         <div style="margin-top: 2rem; float: right;" class="me-5">
         
-                <h3 >TOTAL = Rs. 100000</h3>
+                <h3 >TOTAL = Rs. <span id="total">{{totalValue}}</span></h3>
                 <a href="/place-order" class="btn btn-success" style="width: 100%;" >Place Order</a>
                 
         </div>
@@ -64,6 +64,7 @@
                 }else{
                     //console.log("PRPDUCT INCREMENT OR DECREMENTED")
                     document.getElementById(proId).innerHTML=quantity+count
+                    location.reload()
                 }
             }
         })
