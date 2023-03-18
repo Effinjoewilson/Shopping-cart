@@ -109,7 +109,12 @@ router.get('/place-order', verifyLogin, async(req,res)=>{
   res.render('user/place-order',{admin:false,user,total})
 })
 
-router.post('/place-order', (req,res)=>{
-  console.log(req.body)
+router.post('/place-order', async(req,res)=>{
+  //console.log(req.body)
+  let products=await userHelpers.getCartProductList(req.body.userId)  //it takes the product list in the cart not entire product
+  let totalPrice=await userHelpers.getTotalAmount(req.body.userId)   //that means in cart it includes quantity
+  userHelpers.placeOrder(req.body,products,totalPrice).then((response)=>{
+    res.json({status:true})
+  })
 })
 module.exports = router; 
