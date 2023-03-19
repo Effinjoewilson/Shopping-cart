@@ -53,7 +53,9 @@
             method:'post',
             data:$('#checkout-form').serialize(), // to get every data of form use serialize
             success:(response)=>{
-                alert(response)
+                if(response.status){
+                    location.href='/cash-on-delivery'
+                }
             }
         })
     })

@@ -251,5 +251,13 @@ module.exports={
             let cart=await db.get().collection(collection.CART_COLLECTION).findOne({user:objectId(userId)})
             resolve(cart.products)
         })
+    },
+
+    getUserOrderDetails:(userId)=>{  // MINE
+        return new Promise(async(resolve,reject)=>{
+            
+            let orderDetails=await db.get().collection(collection.ORDER_COLLECTION).findOne({userId:objectId(userId)})
+            resolve(orderDetails)
+        })
     }
 }

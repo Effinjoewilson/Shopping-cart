@@ -1,0 +1,82 @@
+<section class="h-100 h-custom" style="background-color: #d2c9ff;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12">
+                <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                    <div class="card-body p-0">
+                        <div class="row g-0">
+                            <div class="col-lg-8">
+                                <div class="p-5">
+                                    <div class="d-flex justify-content-between align-items-center mb-5">
+                                        <h1 class="fw-bold mb-0 text-black">Order Placed</h1>
+                                    </div>
+<h1>do it later</h1>
+                                    {{#each products}}
+                                    <hr class="my-4">
+                                                
+                                    <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                        <div class="col-md-2 col-lg-2 col-xl-2">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img5.webp"
+                                                class="img-fluid rounded-3" alt="Cotton T-shirt">
+                                        </div>
+                                        <div class="col-md-3 col-lg-3 col-xl-3">
+                                            <h6 class="text-muted">{{this.name}}</h6>
+                                            <h6 class="text-black mb-0">{{this.category}}</h6>
+                                        </div>
+                                        <div class="col-md-6 col-lg-3 col-xl-2 d-flex">
+                                            
+
+                                            <label id="form1"type="number" class="form-control form-control-sm">4</label>
+
+                                           
+                                        </div>
+                                        <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                            <h6 class="mb-0">{{this.price}}</h6>
+                                        </div>
+                                        <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                            <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
+                                        </div>
+                                    </div>
+                                    {{/each}}
+
+                                </div>
+                            </div>
+                            <div class="col-lg-4 bg-grey">
+                                <div class="p-5">
+                                    <h3 class="fw-bold mb-5 mt-2 pt-1">Shipping Address</h3>
+                                    <hr class="my-4">
+
+                                    {{!<div class="d-flex justify-content-between mb-4">
+                                        <h5 class="text-uppercase">items 3</h5> take the cart count at display here
+                                        <h5>Rs. 1500</h5>
+                                    </div>
+
+                                <div class="d-flex justify-content-between mb-4">
+                                    <h5 class="text-uppercase">Shipping charge</h5>
+                                    <h5>Rs. 50</h5>
+                                </div>}}
+                                <div>
+                                    <h5>{{details.deliveryDetails.address}}</h5>
+                                    <h5>{{details.deliveryDetails.pincode}}</h5>
+                                    <h5>Ph No. {{details.deliveryDetails.mobile}}</h5>
+                                </div>
+
+                                    <hr class="my-4">
+
+                                    <div class="d-flex justify-content-between mb-5">
+                                        <h5 class="text-uppercase">Total price</h5>
+                                        <h5>Rs. {{details.totalAmount}}</h5>
+                                    </div>
+
+                                    <button type="button" class="btn btn-dark btn-block btn-lg"
+                                        data-mdb-ripple-color="dark">Register</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

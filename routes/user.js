@@ -117,4 +117,12 @@ router.post('/place-order', async(req,res)=>{
     res.json({status:true})
   })
 })
+
+router.get('/cash-on-delivery', verifyLogin, async(req,res)=>{
+  let user=req.session.user
+  //let products=await userHelpers.getCartProducts(req.session.user._id)
+  let details=await userHelpers.getUserOrderDetails(user._id)
+  //console.log(details)
+  res.render('user/cash-on-delivery',{admin:false,user,details/*,products*/})
+})
 module.exports = router; 
