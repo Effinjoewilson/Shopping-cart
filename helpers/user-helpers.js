@@ -239,7 +239,7 @@ module.exports={
             }
 
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response)=>{
-                db.get().collection(collection.CART_COLLECTION).deleteOne({user:objectId(order.userId)})
+                //db.get().collection(collection.CART_COLLECTION).deleteOne({user:objectId(order.userId)})
                 resolve()
             })
         })
@@ -256,7 +256,46 @@ module.exports={
     getUserOrderDetails:(userId)=>{  // MINE
         return new Promise(async(resolve,reject)=>{
             
+            //let orderDetails=await db.get().collection(collection.ORDER_COLLECTION).find({userId:objectId(userId)}).toArray()
             let orderDetails=await db.get().collection(collection.ORDER_COLLECTION).findOne({userId:objectId(userId)})
+            //console.log(orderDetails)
+            resolve(orderDetails)
+        })
+    },
+
+    insertToOrderHistory:(userId,orderId,products,details,totalValue)=>{
+        //console.log(products)
+        return new Promise((resolve,reject)=>{
+            let historyObj={
+                contacts:{
+                    mobile:details.deliveryDetails.mobile,
+                    address:details.deliveryDetails.address,
+                    pincode:details.deliveryDetails.pincode
+                },
+                userId:objectId(userId),
+                paymentMethod:details.paymentMethod,
+                products:products,
+                totalAmount:totalValue,
+                status:details.status,
+                date:details.date
+            }
+
+            db.get().collection(collection.ORDER_HISTORY_COLLECTION).insertOne(historyObj).then((response)=>{
+
+                db.get().collection(collection.CART_COLLECTION).deleteOne({user:objectId(userId)})
+                db.get().collection(collection.ORDER_COLLECTION).deleteOne({_id:objectId(orderId)})
+
+                resolve()
+            })
+        })
+    },
+
+    getUserOrderHistoryDetails:(userId)=>{
+        
+        return new Promise(async(resolve,reject)=>{
+
+            let orderDetails=await db.get().collection(collection.ORDER_HISTORY_COLLECTION).find({userId:objectId(userId)}).toArray()
+           // console.log(orderDetails)
             resolve(orderDetails)
         })
     }

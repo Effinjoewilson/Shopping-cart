@@ -1,0 +1,26 @@
+<div class="container">
+    <div class="card mt-5">
+        <div class="row">
+            <div class="col-sm-6 mt-4 mb-4 ms-3" style="width: 55%;">
+                <div class="card">
+                    {{#each orderHistory}}
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.status}}</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            <div class="col-sm-6 mt-4 mb-4 ms-3" style="width: 40%;">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Address</h5>
+                        <p class="card-text">{{orderHistory.contacts.address}}</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

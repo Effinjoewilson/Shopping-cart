@@ -120,9 +120,32 @@ router.post('/place-order', async(req,res)=>{
 
 router.get('/cash-on-delivery', verifyLogin, async(req,res)=>{
   let user=req.session.user
-  //let products=await userHelpers.getCartProducts(req.session.user._id)
+  //console.log(user)
+  let products=await userHelpers.getCartProducts(req.session.user._id)
   let details=await userHelpers.getUserOrderDetails(user._id)
+  let totalValue=await userHelpers.getTotalAmount(req.session.user._id)
   //console.log(details)
-  res.render('user/cash-on-delivery',{admin:false,user,details/*,products*/})
+  res.render('user/cash-on-delivery',{admin:false,user,details,products,totalValue})
 })
+
+router.post('/delete-Cart-Order-collections-add-toHistory', async(req,res)=>{
+  //console.log(req.body)
+  userId=req.body.userId
+  orderId=req.body.orderId
+  let products=await userHelpers.getCartProducts(userId)
+  let details=await userHelpers.getUserOrderDetails(userId)
+  let totalValue=await userHelpers.getTotalAmount(userId)
+  userHelpers.insertToOrderHistory(userId,orderId,products,details,totalValue).then((response)=>{
+    //console.log("Hai this is effin")
+    res.json({status:true})
+  })
+})
+
+router.get('/order-history', verifyLogin,async(req,res)=>{
+  let user=req.session.user
+  orderHistory=await userHelpers.getUserOrderHistoryDetails(user._id)
+  //console.log(orderHistory)
+  res.render('user/order-history',{admin:false,user,orderHistory})
+})
+
 module.exports = router; 
