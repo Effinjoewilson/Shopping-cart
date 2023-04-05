@@ -1,26 +1,33 @@
 <div class="container">
+    {{#each orderHistory}}
     <div class="card mt-5">
         <div class="row">
             <div class="col-sm-6 mt-4 mb-4 ms-3" style="width: 55%;">
                 <div class="card">
-                    {{#each orderHistory}}
+                    
                     <div class="card-body">
-                        <h5 class="card-title">{{this.status}}</h5>
+                        <h5 class="card-title">{{this.totalAmount}}</h5>
                         <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                         <a href="#" class="btn btn-primary">Go somewhere</a>
                     </div>
-                    {{/each}}
+                    
                 </div>
             </div>
             <div class="col-sm-6 mt-4 mb-4 ms-3" style="width: 40%;">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Address</h5>
-                        <p class="card-text">{{orderHistory.contacts.address}}</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <p class="card-text">{{this.contacts.address}}</p>
+                        <p class="card-text">Pin Code : {{this.contacts.pincode}}</p>
+                        <p class="card-text">Ph No. {{this.contacts.mobile}}</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    {{/each}}
+</div>
+
+<div>
+    <h1>{{orderHistory.products.product.name}} hi</h1>
 </div>

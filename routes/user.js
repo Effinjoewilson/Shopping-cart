@@ -143,8 +143,10 @@ router.post('/delete-Cart-Order-collections-add-toHistory', async(req,res)=>{
 
 router.get('/order-history', verifyLogin,async(req,res)=>{
   let user=req.session.user
-  orderHistory=await userHelpers.getUserOrderHistoryDetails(user._id)
+  let orderHistory=await userHelpers.getUserOrderHistoryDetails(user._id)
   //console.log(orderHistory)
+  /*let products=await userHelpers.getCartProductsFromHistory(user._id)
+  console.log(products)*/
   res.render('user/order-history',{admin:false,user,orderHistory})
 })
 
