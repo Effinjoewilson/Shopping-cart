@@ -1,6 +1,7 @@
 
 <section>
     <div class="container mt-4">
+        {{#if products}}
         <table class="table">
             <thead>
                 <tr>
@@ -38,6 +39,14 @@
                 <a href="/place-order" class="btn btn-success" style="width: 100%;" >Place Order</a>
                 
         </div>
+        {{else}}
+        <div class="mt-5 d-flex aligns-items-center justify-content-center">
+            <h1 >No items in cart</h1>
+        </div>
+        <div class="mt-2 d-flex aligns-items-center justify-content-center">
+            <a href="/" class="btn btn-primary">Add Items</a>
+        </div>
+        {{/if}}
     </div>
 </section>
 
