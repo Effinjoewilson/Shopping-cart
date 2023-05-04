@@ -4,13 +4,20 @@
         <div class="row">
             <div class="col-sm-6 mt-4 mb-4 ms-3" style="width: 55%;">
                 <div class="card">
-                    
+                    {{#each products}}
                     <div class="card-body">
-                        <h5 class="card-title">{{this.totalAmount}}</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <h5 class="card-title">{{this.product.name}}</h5>
+                        <p class="card-text">{{this.product.category}}</p>  
+                        <p href="" class="">Price : {{this.product.price}}</p>
                     </div>
-                    
+                    <div class="card-body">
+                        <img src="/product-images/{{this.product._id}}.jpg" style="width: 75px; height: 75px;">
+                    </div>
+                    {{/each}}
+                     <div class="card-body">
+                        <hr>
+                        <h3>Total : {{this.totalAmount}}</h3>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-6 mt-4 mb-4 ms-3" style="width: 40%;">
@@ -22,12 +29,14 @@
                         <p class="card-text">Ph No. {{this.contacts.mobile}}</p>
                     </div>
                 </div>
+                <div class="card">
+                    <div class="card-body">
+                         <p>Date : {{this.date}}</p>
+                         <p>Mode : {{this.paymentMethod}}</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     {{/each}}
-</div>
-
-<div>
-    <h1>{{orderHistory.products.product.name}} hi</h1>
 </div>

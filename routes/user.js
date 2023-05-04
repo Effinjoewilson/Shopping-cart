@@ -145,9 +145,9 @@ router.get('/order-history', verifyLogin,async(req,res)=>{
   let user=req.session.user
   let orderHistory=await userHelpers.getUserOrderHistoryDetails(user._id)
   //console.log(orderHistory)
-  /*let products=await userHelpers.getCartProductsFromHistory(user._id)
-  console.log(products)*/
-  res.render('user/order-history',{admin:false,user,orderHistory})
+  let products=await userHelpers.getCartProductsFromHistory(user._id)
+  //console.log(products)
+  res.render('user/order-history',{admin:false,user,orderHistory,products})
 })
 
 module.exports = router; 
