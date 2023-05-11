@@ -113,8 +113,17 @@ router.post('/place-order', async(req,res)=>{
   //console.log(req.body)
   let products=await userHelpers.getCartProductList(req.body.userId)  //it takes the product list in the cart not entire product
   let totalPrice=await userHelpers.getTotalAmount(req.body.userId)   //that means in cart it includes quantity
-  userHelpers.placeOrder(req.body,products,totalPrice).then((response)=>{
-    res.json({status:true})
+  userHelpers.placeOrder(req.body,products,totalPrice).then((orderId)=>{
+    //console.log("OrderId : "+orderId)
+    if(req.body['payment_method']=='cash'){
+       res.json({cash:true})
+    }else{
+      //console.log("This is Effin")
+       userHelpers.generateRazorpay(orderId,totalPrice).then((response)=>{
+        res.json(response)
+       })
+    }
+    
   })
 })
 
@@ -148,6 +157,10 @@ router.get('/order-history', verifyLogin,async(req,res)=>{
   let products=await userHelpers.getCartProductsFromHistory(user._id)
   //console.log(products)
   res.render('user/order-history',{admin:false,user,orderHistory,products})
+})
+
+router.post('/verify-payment', (req,res)=>{
+  console.log(req.body)
 })
 
 module.exports = router; 
