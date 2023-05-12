@@ -159,8 +159,26 @@ router.get('/order-history', verifyLogin,async(req,res)=>{
   res.render('user/order-history',{admin:false,user,orderHistory,products})
 })
 
-router.post('/verify-payment', (req,res)=>{
-  console.log(req.body)
+router.post('/verify-payment', async(req,res)=>{
+  let userId=req.session.user._id
+  let orderId=req.body['order[receipt]']
+  let products=await userHelpers.getCartProducts(userId)
+  let details=await userHelpers.getUserOrderDetails(userId)
+  let totalValue=await userHelpers.getTotalAmount(userId)
+  
+  //console.log(req.body)
+  userHelpers.verifyPayment(req.body).then(()=>{
+      userHelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
+        //console.log("Payment Successfull");
+
+        userHelpers.insertToOrderHistory(userId,orderId,products,details,totalValue)
+
+        res.json({status:true})
+      })
+  }).catch((err)=>{
+    console.log(err);
+    res.json({status:false,errMsg:''})
+  })
 })
 
 module.exports = router; 

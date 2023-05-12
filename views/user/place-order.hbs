@@ -104,6 +104,14 @@
                 order
             },
             method:'post',
+            success:(response)=>{
+                if(response.status){
+                    alert("Order is Placed Successfully")
+                    location.href='/order-history'
+                }else{
+                    alert("Payment failed")
+                }
+            }
         })
     }
 </script>
