@@ -1,0 +1,26 @@
+<div class="container">
+    <div class="row mt-5" style="margin: 0 auto; width:50%;">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            {{!<form action="/admin/signup" method="post" role="form" enctype="">}}
+                <legend style="text-align: center;" class="mb-4">Create new account</legend>
+
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" name="name" required>
+                </div><br>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" name="email" required>
+                </div><br>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="password" required>
+                </div><br>
+                <a href="/admin/login" style="float: left; text-decoration:none ;">Already have an account ?</a>
+                <button type="submit" class="btn btn-primary" style="float: right;">Sign up</button>
+            </form>
+        </div>
+    </div>
+</div>

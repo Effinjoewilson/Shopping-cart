@@ -2,6 +2,7 @@
 var db = require('../config/connection')
 var collection= require('../config/collections')
 var objectId=require('mongodb').ObjectId
+const bcrypt = require('bcrypt')
 
 module.exports={
 
@@ -52,6 +53,42 @@ module.exports={
             }).then((response)=>{
                 resolve()
             })
+        })
+    },
+
+    /*doSignup:(adminData)=>{
+        //console.log(adminData)
+        return new Promise(async(resolve,reject)=>{
+            adminData.password =await bcrypt.hash(adminData.password,10)                               //since it is a single threaded 
+            db.get().collection(collection.ADMIN_COLLECTION).insertOne(adminData).then((data)=>{      //function, if await is not given
+                //console.log(data)                                                                //null will be there in db
+                resolve(adminData)
+            })
+        })
+        
+    },*/
+
+    doLogin:(adminData)=>{
+        return new Promise(async(resolve,reject)=>{
+            let loginStatus=false
+            let response={}
+            let admin= await db.get().collection(collection.ADMIN_COLLECTION).findOne({email:adminData.email})
+            if(admin){
+                bcrypt.compare(adminData.password,admin.password).then((status)=>{       //bcrypt.compare is to check if the current
+                    if(status){                                                 //password is same to encrypted password in database
+                        console.log("Login success")
+                        response.admin=admin
+                        response.status=true
+                        resolve(response)
+                    }else{
+                        console.log("Login failed")
+                        resolve({status:false})
+                    }
+                })
+            }else{
+                console.log("Login failed")
+                resolve({status:false})
+            }
         })
     }
 }
