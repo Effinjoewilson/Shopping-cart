@@ -121,26 +121,21 @@ router.post('/place-order', async(req,res)=>{
   let totalPrice=await userHelpers.getTotalAmount(req.body.userId)   //that means in cart it includes quantity
   userHelpers.placeOrder(req.body,products,totalPrice).then((orderId)=>{
     //console.log("OrderId : "+orderId)
-    if(req.body['payment_method']=='cash'){
-       res.json({cash:true})
-    }else{
-      //console.log("This is Effin")
-       userHelpers.generateRazorpay(orderId,totalPrice).then((response)=>{
-        res.json(response)
-       })
-    }
-    
+    res.json(orderId)
+    //console.log("OrderId : "+orderId) 
   })
 })
 
-router.get('/cash-on-delivery', verifyLogin, async(req,res)=>{
+router.get('/confirm-order/:id', verifyLogin, async(req,res)=>{
+  //console.log("Order id : "+req.params.id)
+  var orderId=req.params.id
   let user=req.session.user
   //console.log(user)
   let products=await userHelpers.getCartProducts(req.session.user._id)
-  let details=await userHelpers.getUserOrderDetails(user._id)
+  let details=await userHelpers.getUserOrderDetails(orderId)
   let totalValue=await userHelpers.getTotalAmount(req.session.user._id)
-  //console.log(details)
-  res.render('user/cash-on-delivery',{admin:false,user,details,products,totalValue})
+  //console.log("hai"+details._id)
+  res.render('user/confirm-order',{admin:false,user,details,products,totalValue})
 })
 
 router.post('/delete-Cart-Order-collections-add-toHistory', async(req,res)=>{
@@ -148,12 +143,18 @@ router.post('/delete-Cart-Order-collections-add-toHistory', async(req,res)=>{
   userId=req.body.userId
   orderId=req.body.orderId
   let products=await userHelpers.getCartProducts(userId)
-  let details=await userHelpers.getUserOrderDetails(userId)
+  let details=await userHelpers.getUserOrderDetails(orderId)
   let totalValue=await userHelpers.getTotalAmount(userId)
-  userHelpers.insertToOrderHistory(userId,orderId,products,details,totalValue).then((response)=>{
-    //console.log("Hai this is effin")
-    res.json({status:true})
-  })
+
+  if(details.paymentMethod=='cash'){
+    userHelpers.insertToOrderHistory(userId,orderId,products,details,totalValue)
+    res.json({cash:true})
+ }else{
+   //console.log("This is Effin")
+    userHelpers.generateRazorpay(orderId,totalValue).then((response)=>{
+     res.json(response)
+    })
+ }
 })
 
 router.get('/order-history', verifyLogin,async(req,res)=>{
@@ -168,16 +169,11 @@ router.get('/order-history', verifyLogin,async(req,res)=>{
 router.post('/verify-payment', async(req,res)=>{
   let userId=req.session.user._id
   let orderId=req.body['order[receipt]']
-  let products=await userHelpers.getCartProducts(userId)
-  let details=await userHelpers.getUserOrderDetails(userId)
-  let totalValue=await userHelpers.getTotalAmount(userId)
   
   //console.log(req.body)
   userHelpers.verifyPayment(req.body).then(()=>{
       userHelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
         //console.log("Payment Successfull");
-
-        userHelpers.insertToOrderHistory(userId,orderId,products,details,totalValue)
 
         res.json({status:true})
       })
@@ -185,6 +181,17 @@ router.post('/verify-payment', async(req,res)=>{
     console.log(err);
     res.json({status:false,errMsg:''})
   })
+})
+
+router.get('/insert-to-order-history/:id', async(req,res)=>{
+  let userId=req.session.user._id
+  var orderId=req.params.id
+  let products=await userHelpers.getCartProducts(userId)
+  let details=await userHelpers.getUserOrderDetails(orderId)
+  let totalValue=await userHelpers.getTotalAmount(userId)
+
+  userHelpers.insertToOrderHistory(userId,orderId,products,details,totalValue)
+  res.redirect('/order-history')
 })
 
 module.exports = router; 

@@ -66,6 +66,9 @@
                                         <h5 class="text-uppercase">Total price</h5>
                                         <h5>Rs. {{totalValue}}</h5>
                                     </div>
+                                    <div>
+                                        <p class="">Mode : {{details.paymentMethod}}</p>                                        
+                                    </div>
 
                                     <a class="btn btn-dark btn-block btn-lg" onclick="deleteCartOrdercollections('{{user._id}}','{{details._id}}')">CONFIRM</a>
                                     <br>
@@ -92,9 +95,67 @@
             },
             method:'post',
             success:(response)=>{
-                if(response.status){
+                if(response.cash){
                     alert("Order is Placed Successfully")
                     location.href='/order-history'
+                }else{
+                    razorpayPayment(response)
+                }
+            }
+        })
+    }
+
+    function razorpayPayment(order){
+        var options = {
+            "key": "rzp_test_hwtFwqar8csk00", // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "Acme Corp", //your business name
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response){
+                /*alert(response.razorpay_payment_id);
+                alert(response.razorpay_order_id);
+                alert(response.razorpay_signature);*/
+
+                verifyPayment(response,order)   // payment response
+            },
+            
+            "prefill": {
+                "name": "Gaurav Kumar", //your customer's name
+                "email": "gaurav.kumar@example.com",
+                "contact": "9000090000"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+
+    function verifyPayment(payment,order){
+        $.ajax({
+            url:'/verify-payment',
+            data:{
+                payment,
+                order
+            },
+            method:'post',
+            success:(response)=>{
+                if(response.status){
+                    var id=order.receipt
+                    alert("Order is Placed Successfully")
+                    var redirectUrl = '/insert-to-order-history/' + id;
+                    location.href=redirectUrl;
+                   // location.href='/order-history'
+                }else{
+                    alert("Payment failed")
                 }
             }
         })

@@ -260,11 +260,11 @@ module.exports={
         })
     },
 
-    getUserOrderDetails:(userId)=>{  // MINE
+    getUserOrderDetails:(orderId)=>{  // MINE
         return new Promise(async(resolve,reject)=>{
             
             //let orderDetails=await db.get().collection(collection.ORDER_COLLECTION).find({userId:objectId(userId)}).toArray()
-            let orderDetails=await db.get().collection(collection.ORDER_COLLECTION).findOne({userId:objectId(userId)})
+            let orderDetails=await db.get().collection(collection.ORDER_COLLECTION).findOne({_id:objectId(orderId)})
             //console.log(orderDetails)
             resolve(orderDetails)
         })
@@ -382,6 +382,7 @@ module.exports={
     },
 
     changePaymentStatus:(orderId)=>{
+        //console.log(orderId)
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.ORDER_COLLECTION)
             .updateOne({_id:objectId(orderId)},
@@ -391,6 +392,7 @@ module.exports={
                 }
             }
             ).then(()=>{
+                //console.log("Status changed")
                 resolve()
             })
         })
