@@ -1,0 +1,33 @@
+<section>
+    <div class="container mt-4">
+        {{#if users}}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            {{#each users}}
+            <tbody>
+                <tr>
+                    <th scope="row">{{@index}}</th>
+                    <td>{{this.name}}</td>
+                    <td>{{this.email}}</td>
+                    
+                </tr>
+            </tbody>
+            {{/each}}
+        </table>
+
+        {{else}}
+        <div class="mt-5 d-flex aligns-items-center justify-content-center">
+            <h1 >No users!!</h1>
+        </div>
+        <div class="mt-2 d-flex aligns-items-center justify-content-center">
+            <a href="/admin" class="btn btn-primary">View products</a>
+        </div>
+        {{/if}}
+    </div>
+</section>

@@ -112,4 +112,10 @@ router.post('/signup', (req,res)=>{
   })
 })*/
 
+router.get('/all-users',verifyLogin, async(req,res)=>{
+  let users=await productHelpers.getAllUsers()
+  //console.log(users)
+  res.render('admin/all-users',{users,admin:true})
+})
+
 module.exports = router;
