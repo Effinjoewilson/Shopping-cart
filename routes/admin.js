@@ -3,7 +3,7 @@ var router = express.Router();
 var productHelpers = require('../helpers/product-helpers');
 const verifyLogin=(req,res,next)=>{
   //console.log("Login verified")
-  if(req.session.admin){
+  if(req.session.adminLoggedIn){
     next()
   }else{
     res.redirect('/admin/login')
@@ -83,7 +83,7 @@ router.post('/login', (req,res)=>{
     if(response.status){
       //console.log(response)
       req.session.admin=response.admin
-      req.session.admin.loggedIn=true
+      req.session.adminLoggedIn=true
       res.redirect('/admin/')
     }else{
       req.session.adminloginErr='Invalid username or password'
@@ -94,6 +94,7 @@ router.post('/login', (req,res)=>{
 
 router.get('/logout',(req,res)=>{
   req.session.admin=null
+  req.session.adminLoggedIn=false
   res.redirect('/')
 })
 
@@ -107,7 +108,7 @@ router.post('/signup', (req,res)=>{
     //console.log(adminData)
     
     req.session.admin=adminData
-    req.session.admin.loggedIn=true
+    req.session.adminLoggedIn=true
     res.redirect('/admin')
   })
 })*/

@@ -3,7 +3,7 @@ var router = express.Router();
 var productHelpers = require('../helpers/product-helpers');
 const userHelpers = require('../helpers/user-helpers')
 const verifyLogin=(req,res,next)=>{
-  if(req.session.user){
+  if(req.session.userLoggedIn){
     next()
   }else{
     res.redirect('/login')
@@ -40,8 +40,8 @@ router.post('/login', (req,res)=>{
   userHelpers.doLogin(req.body).then((response)=>{
     if(response.status){
       
-      req.session.user=response.user
-      req.session.user.loggedIn=true
+      req.session.user=response.user   // user detsils is used in various place using req.session.user
+      req.session.userLoggedIn=true   //if user is logged in or if there is session is ditermined by req.session.userLoggedIn
       res.redirect('/')
     }else{
       req.session.userloginErr='Invalid username or password'
@@ -52,6 +52,7 @@ router.post('/login', (req,res)=>{
 
 router.get('/logout',(req,res)=>{
   req.session.user=null
+  req.session.userLoggedIn=false
   res.redirect('/')
 })
 
@@ -65,7 +66,7 @@ router.post('/signup', (req,res)=>{
     //console.log(userData)
     
     req.session.user=userData
-    req.session.user.loggedIn=true
+    req.session.userLoggedIn=true
     res.redirect('/')
   })
 })
