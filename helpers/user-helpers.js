@@ -231,6 +231,7 @@ module.exports={
             //console.log(order,products,total)
             let status=order.payment_method==='cash'?'placed':'pending'  //like if else
             let orderObj={
+                name:order.name,
                 deliveryDetails:{
                     mobile:order.phonenumber,
                     address:order.address,
@@ -274,6 +275,7 @@ module.exports={
         //console.log(products)
         return new Promise((resolve,reject)=>{
             let historyObj={
+                name:details.name,
                 contacts:{
                     mobile:details.deliveryDetails.mobile,
                     address:details.deliveryDetails.address,
