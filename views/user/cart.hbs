@@ -1,103 +1,57 @@
 
 <section>
-    <div class="container mt-4">
+    <div class="container">
         {{#if products}}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Title</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                </tr>
-            </thead>
-            {{#each products}}
-            <tbody>
-                <tr>
-                               {{!The product details are in the object product}}
-                    <td>                             
-                        <img src="/product-images/{{this.product._id}}.jpg" style="width: 75px; height: 75px;">
-                    </td>
-                    <td>{{this.product.name}}</td>
-                    <td>{{this.product.price}}</td>
-                    
-                    <td>
-                        <button style="float: left;" class="cart-item-count me-2" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1)">-</button>
-                        <span style="float: left;" id="{{this.product._id}}">{{this.quantity}}</span>
-                        <button style="float: left;" class="cart-item-count ms-2" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1)">+</button>
-                    </td>
-                    <td>
-                        <a href="" onclick="removeProduct('{{this._id}}','{{this.product._id}}')" class="btn btn-danger">Remove</a>
-                    </td>
-                </tr>
-            </tbody>
-            {{/each}}
-        </table>
-        <div style="margin-top: 2rem; float: right;" class="me-5">
-        
-                <h3 >TOTAL = Rs. <span id="total">{{totalValue}}</span></h3>
-                <a href="/place-order" class="btn btn-success" style="width: 100%;" >Place Order</a>
-                
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Title</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                {{#each products}}
+                <tbody>
+                    <tr>
+                        {{!The product details are in the object product}}
+                        <td>
+                            <img src="/product-images/{{this.product._id}}.jpg" style="width: 75px; height: 75px;">
+                        </td>
+                        <td style="font-size: calc(0.8em + 0.5vw);">{{this.product.name}}</td>
+                        <td>{{this.product.price}}</td>
+                        <td>
+                            <div class="quantity-container">
+                                <button class="cart-item-count" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1)">-</button>
+                                <span id="{{this.product._id}}">{{this.quantity}}</span>
+                                <button class="cart-item-count" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1)">+</button>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="" onclick="removeProduct('{{this._id}}','{{this.product._id}}')" class="btn btn-danger">Remove</a>
+                        </td>
+                    </tr>
+                </tbody>
+                {{/each}}
+            </table>
         </div>
+        <div class="total-container text-center mt-3">
+                <h3>TOTAL = Rs. <span id="total">{{totalValue}}</span></h3>
+            <div class="text-center">
+                <a href="/place-order" class="btn btn-success">Place Order</a>
+            </div>
+        </div>
+
+
         {{else}}
-        <div class="mt-5 d-flex aligns-items-center justify-content-center">
-            <h1 >No items in cart</h1>
+        <div class="mt-5 d-flex align-items-center justify-content-center">
+            <h1>No items in cart</h1>
         </div>
-        <div class="mt-2 d-flex aligns-items-center justify-content-center">
+        <div class="mt-2 d-flex align-items-center justify-content-center">
             <a href="/" class="btn btn-primary">Add Items</a>
         </div>
         {{/if}}
     </div>
 </section>
-
-<script>
-    function changeQuantity(cartId,proId,count){
-        let quantity=parseInt(document.getElementById(proId).innerHTML)// this takes the current quantity 
-        //console.log(cartId)
-        count=parseInt(count)
-
-        $.ajax({
-            url:'/change-product-quantity',
-            data:{
-                cart:cartId,
-                product:proId,
-                count:count,
-                quantity:quantity
-            },
-            method:'post',
-            success:(response)=>{
-                if(response.removeProduct){
-                    alert("Product removed from the cart")
-                    //console.log("PRODUCT DELETED")
-                    location.reload()
-                }else{
-                    //console.log("PRPDUCT INCREMENT OR DECREMENTED")
-                    document.getElementById(proId).innerHTML=quantity+count
-                    location.reload()
-                }
-            }
-        })
-    }
-
-    function removeProduct(cartId,proId){
-
-        $.ajax({
-            url:'/remove-product',
-            data:{
-                cart:cartId,
-                product:proId
-            },
-            method:'post',
-            success:(response)=>{
-                if(response.removeProduct){
-                    //console.log("PRODUCT DELETED")
-                    alert("Product removed from the cart")
-                    location.reload()
-                }else{
-                    console.log("ERROR OCCURED")
-                }
-            }
-        })
-    }
-
-</script>
