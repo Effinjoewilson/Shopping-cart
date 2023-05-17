@@ -1,5 +1,6 @@
 <main style="padding-top: 56px;">
 <div class="container">
+    {{#if orderHistory}}
     {{#each orderHistory}}
     <div class="card mt-3" style="background-color: rgb(188, 206, 206);">
         <div class="row">
@@ -54,5 +55,13 @@
         </div>
     </div>
     {{/each}}
+    {{else}}
+        <div class="mt-5 d-flex align-items-center justify-content-center">
+            <h1>You have no orders</h1>
+        </div>
+        <div class="mt-2 d-flex align-items-center justify-content-center">
+            <a href="/" class="btn btn-primary">purchase items</a>
+        </div>
+        {{/if}}
 </div>
 </main>
