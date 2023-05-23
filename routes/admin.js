@@ -119,4 +119,20 @@ router.get('/all-users',verifyLogin, async(req,res)=>{
   res.render('admin/all-users',{users,admin:true})
 })
 
+router.get('/all-orders', verifyLogin, async(req,res)=>{
+  let orders=await productHelpers.getAllOrders()
+  let products=await productHelpers.getCartProductsFromHistory()
+  //console.log(orders)
+  res.render('admin/all-orders',{admin:true,orders,products})
+})
+
+router.post('/change-status', verifyLogin,(req,res)=>{
+  //console.log(req.body)
+  let status=req.body.status
+  let orderId=req.body.orderId
+  productHelpers.changeStatus(status,orderId).then((response)=>{
+    res.json({statusChanged:true})
+  })
+})
+
 module.exports = router;

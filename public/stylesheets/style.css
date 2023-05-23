@@ -1,0 +1,21 @@
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .connector-lines {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+  }
+  
+  .connector-line {
+    stroke: black;
+    stroke-width: 2px;
+    fill: transparent;
+  }
+  

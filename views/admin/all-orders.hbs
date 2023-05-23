@@ -1,0 +1,100 @@
+
+<main style="padding-top: 56px;">
+<div class="container">
+    {{#if orders}}
+    {{#each orders}}
+    <div class="card mt-3" style="background-color: rgb(188, 206, 206);">
+        <div class="row">
+            <div class="col-lg-6 col-md-8 col-sm-10 mt-4 mb-4 mx-auto">
+                <div class="card ms-2" style="background-color: rgb(248, 249, 250);">
+                    {{#each products}}
+                    <div class="card-body">
+                        <div class="row mb-4 align-items-center">
+                            <div class="col-4 col-md-2">
+                                <img src="/product-images/{{this.product._id}}.jpg" class="img-fluid rounded-3" style="width: 75px; height: 75px;">
+                            </div>
+                            <div class="col-8 col-md-4">
+                                <h6 class="text-muted">{{this.product.name}}</h6>
+                                <h6 class="text-black mb-0">{{this.product.category}}</h6>
+                            </div>
+                            <div class="col-4 col-md-3 col-lg-2 d-flex">
+                                <label id="form1" type="number" class="form-control form-control-sm">{{this.quantity}}</label>
+                            </div>
+                            <div class="col-8 col-md-3 col-lg-2">
+                                <h6 class="mb-0">{{this.product.price}}</h6>
+                            </div>
+                            <div class="col-2 col-md-1 col-lg-1 text-end">
+                                <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                    <div class="card-body">
+                        <hr>
+                        <h3>Total: {{this.totalAmount}}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-8 col-sm-10 mt-4 mb-4 mx-auto">
+                <div class="card me-2">
+                    <div class="card-body">
+                        <h5 class="card-title">Address</h5>
+                        <p class="card-text">{{this.name}}</p>
+                        <p class="card-text">{{this.contacts.address}}</p>
+                        <p class="card-text">Pin Code: {{this.contacts.pincode}}</p>
+                        <p class="card-text">Ph No. {{this.contacts.mobile}}</p>
+                    </div>
+                </div>
+                <div class="card me-2">
+                    <div class="card-body">
+                        <p>Date: {{this.date}}</p>
+                        <p>Mode: {{this.paymentMethod}}</p>
+                        <p>Status: {{this.status}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body button-row" style="background-color:rgb(142, 169, 169);">
+            <button type="button" value="Placed" data-order-id="{{this._id}}" class="status-button btn btn-danger">Placed</button>
+            <button type="button" value="Dispatched" data-order-id="{{this._id}}" class="status-button btn btn-danger">Dispatched</button>
+            <button type="button" value="Out for delivery" data-order-id="{{this._id}}" class="status-button btn btn-danger">Out for delivery</button>
+            <button type="button" value="Delivered" data-order-id="{{this._id}}" class="status-button btn btn-danger">Delivered</button>
+        </div>
+    </div>
+    {{/each}}
+    {{else}}
+        <div class="mt-5 d-flex align-items-center justify-content-center">
+            <h1>No orders at the moment</h1>
+        </div>
+        <div class="mt-2 d-flex align-items-center justify-content-center">
+            <a href="/admin" class="btn btn-primary">Go Back</a>
+        </div>
+        {{/if}}
+</div>
+</main>
+
+<script>
+$(document).ready(function() {
+
+    $('.status-button').click(function() {
+        var status = $(this).val();
+        var orderId = $(this).data('order-id');
+
+        $.ajax({
+            url: '/admin/change-status',
+            method: 'POST',
+            data: {
+                 status: status,
+                 orderId: orderId 
+                 },
+            success: function(response) {
+                if(response.statusChanged){
+                     location.reload()
+                }
+            }
+        });
+    });
+});
+
+
+</script>
