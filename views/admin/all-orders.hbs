@@ -54,11 +54,12 @@
                 </div>
             </div>
         </div>
-        <div class="card-body button-row" style="background-color:rgb(142, 169, 169);">
-            <button type="button" value="Placed" data-order-id="{{this._id}}" class="status-button btn btn-danger">Placed</button>
-            <button type="button" value="Dispatched" data-order-id="{{this._id}}" class="status-button btn btn-danger">Dispatched</button>
-            <button type="button" value="Out for delivery" data-order-id="{{this._id}}" class="status-button btn btn-danger">Out for delivery</button>
-            <button type="button" value="Delivered" data-order-id="{{this._id}}" class="status-button btn btn-danger">Delivered</button>
+        <div class="card-body button-row" style="background-color:rgb(142, 169, 169);" data-order-id="{{this._id}}">
+                <button type="button" value="Placed" data-order-id="{{this._id}}" class="status-button btn btn-danger">Placed</button>
+                <button type="button" value="Dispatched" data-order-id="{{this._id}}" class="status-button btn btn-danger">Dispatched</button>
+                <button type="button" value="Out for delivery" data-order-id="{{this._id}}" class="status-button btn btn-danger">Out for delivery</button>
+                <button type="button" value="Delivered" data-order-id="{{this._id}}" class="status-button btn btn-danger">Delivered</button>
+            
         </div>
     </div>
     {{/each}}
@@ -75,21 +76,62 @@
 
 <script>
 $(document).ready(function() {
+    $('.status-button').each(function() {
+        var orderId = $(this).data('order-id');
+        var buttonValue = $(this).val();
+        var isDisabled = localStorage.getItem(`order_${orderId}_${buttonValue}_disabled`);
+
+        if (isDisabled === 'true') {
+            $(this).prop('disabled', true);
+        }
+        
+        if (buttonValue === 'Delivered' && isDisabled === 'true') {
+            $(this).remove();
+            $(`.button-row[data-order-id="${orderId}"]`).text('Item Delivered');
+        }
+    });
 
     $('.status-button').click(function() {
         var status = $(this).val();
         var orderId = $(this).data('order-id');
+        var placedButton = $(`.status-button[data-order-id="${orderId}"][value="Placed"]`);
+        var dispatchedButton = $(`.status-button[data-order-id="${orderId}"][value="Dispatched"]`);
+        var outForDeliveryButton = $(`.status-button[data-order-id="${orderId}"][value="Out for delivery"]`);
+        var deliveredButton = $(`.status-button[data-order-id="${orderId}"][value="Delivered"]`);
 
         $.ajax({
             url: '/admin/change-status',
             method: 'POST',
             data: {
-                 status: status,
-                 orderId: orderId 
-                 },
+                status: status,
+                orderId: orderId 
+            },
             success: function(response) {
-                if(response.statusChanged){
-                     location.reload()
+                if (response === 'Dispatched') {
+                    placedButton.prop('disabled', true);
+                    dispatchedButton.prop('disabled', true);
+                    localStorage.setItem(`order_${orderId}_Placed_disabled`, true);
+                    localStorage.setItem(`order_${orderId}_Dispatched_disabled`, true);
+                    location.reload()
+                } else if (response === 'Out for delivery') {
+                    placedButton.prop('disabled', true);
+                    dispatchedButton.prop('disabled', true);
+                    outForDeliveryButton.prop('disabled', true);
+                    localStorage.setItem(`order_${orderId}_Placed_disabled`, true);
+                    localStorage.setItem(`order_${orderId}_Dispatched_disabled`, true);
+                    localStorage.setItem(`order_${orderId}_Out for delivery_disabled`, true);
+                    location.reload()
+                } else if (response === 'Delivered') {
+                    placedButton.remove();
+                    dispatchedButton.remove();
+                    outForDeliveryButton.remove();
+                    deliveredButton.remove();
+                    $(`.button-row[data-order-id="${orderId}"]`).text('Item Delivered');
+                    localStorage.setItem(`order_${orderId}_Placed_disabled`, true);
+                    localStorage.setItem(`order_${orderId}_Dispatched_disabled`, true);
+                    localStorage.setItem(`order_${orderId}_Out for delivery_disabled`, true);
+                    localStorage.setItem(`order_${orderId}_Delivered_disabled`, true);
+                    location.reload()
                 }
             }
         });

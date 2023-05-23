@@ -131,7 +131,7 @@ router.post('/change-status', verifyLogin,(req,res)=>{
   let status=req.body.status
   let orderId=req.body.orderId
   productHelpers.changeStatus(status,orderId).then((response)=>{
-    res.json({statusChanged:true})
+    res.json(response)
   })
 })
 
