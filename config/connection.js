@@ -1,22 +1,20 @@
-const mongoClient = require('mongodb').MongoClient
-const state={
-    db:null
-}
+const mongoClient = require('mongodb').MongoClient;
+const state = {
+    db: null,
+};
 
-module.exports.connect = function(done){
-    //const url ='mongodb://localhost:27017'
-    const dbname='shopping'
+module.exports.connect = function(done) {
+    const url = 'mongodb+srv://Effinjoewilson:XXrYGYTCGvIR3Mdx@cluster0.iun1f8l.mongodb.net/';
+    const dbname = 'shopping';
 
-    mongoClient.connect('mongodb://localhost:27017',  (err,data)=>{
-        if(err)  return done(err)
-        state.db=data.db(dbname)
+    mongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
+        if (err) return done(err);
 
+        state.db = client.db(dbname);
+        done();
+    });
+};
 
-    })
-
-    done()
-}
-
-module.exports.get=function(){
-    return state.db
-}
+module.exports.get = function() {
+    return state.db; 
+};
