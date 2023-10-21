@@ -1,10 +1,11 @@
+require('dotenv').config()
 const mongoClient = require('mongodb').MongoClient;
 const state = {
     db: null,
 };
 
 module.exports.connect = function(done) {
-    const url = 'mongodb+srv://Effinjoewilson:XXrYGYTCGvIR3Mdx@cluster0.iun1f8l.mongodb.net/';
+    const url = process.env.MONGO_URI;
     const dbname = 'shopping';
 
     mongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
