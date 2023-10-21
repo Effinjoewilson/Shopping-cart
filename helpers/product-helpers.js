@@ -15,12 +15,17 @@ module.exports={
         })
     },
 
-    getAllProducts:() =>{                                                      // using promise
-        return new Promise(async(resolve,reject)=>{
-            let products=await db.get().collection(collection.PRODUCT_COLLECTION).find().toArray()
-            resolve(products)                //resolve is for success 
-        })                                  //when it is returned its
-    },                                      //value will be in then
+    getAllProducts: () => {
+        return new Promise(async (resolve, reject) => {
+          try {
+            const products = await db.get().collection(collection.PRODUCT_COLLECTION).find().toArray();
+            resolve(products);
+          } catch (error) {
+            console.error('Error fetching products:', error);
+            reject(error); // Reject the promise in case of an error
+          }
+        });
+      },
 
     deleteProduct:(proId) =>{
         return new Promise((resolve,reject)=>{
